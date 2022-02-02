@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Welcome to Scramble.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Tourney&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://unpkg.com/vue@next"></script>
+  <style>
+    .grid-column-1 {
+      grid-column: 1;
+    }
+
+    .grid-row-1 {
+      grid-row: 1;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app" class="container">
+    <div class="row mb-5">
+      <div class="col col-12">
+        <h1 class="display-4 mb-5 text-center my-3">{{ title }}</h1>
+      </div>
+      <div class="col col-6">
+        <h2 class="text-center">{{ game.points }}<br>POINTS</h2>
+      </div>
+      <div class="col col-6">
+        <h2 class="text-center">{{ game.strikes }}<br>STRIKES</h2>
+      </div>
+    </div>
+    
+    <div class="row d-grid">
+      <div class="col col-6 offset-3 grid-column-1 grid-row-1" v-if="game.active">
+        <div class="displayedWord" v.show="game.randomWord">{{ game.randomWord }}</div>
+        <div class="alert alert-info" v-show="game.message" style="text-align: center;">{{ game.message }}</div>
+        <form @submit.prevent>
+          <input  type="text"
+                  placeholder="Enter your guess"
+                  ref="guess"
+                  class="form-control mb-3"
+                  v-model.randomWord="game.guess" 
+          />
+          <div class="btn-container">
+            <div class="submit-btn">
+              <button type="submit" class="btn btn-info" @click="verifyGuess" :disabled="game.guesses === maxGuesses || game.points === maxPoints">Guess</button>
+            </div>
+            <div class="pass-btn">
+              <button type="submit" class="btn btn-warning" @click="pass" :disabled="game.passesRemaining === 0 || game.strikes === maxStrikes || game.points === maxPoints">Pass&nbsp;{{ this.game.passesRemaining }}</button>
+            </div>  
+          </div>
+        </form>
+      </div>
+      <div class="col col-6 offset-3 text-center grid-column-1 grid-row-1" v-if="!game.active">
+        <button class="btn btn-secondary" @click="playGame">
+          <span v-if="game.points === maxPoints || game.strikes === maxStrikes">Play, Again?</span>
+          <span v-else>Play</span>
+        </button>
+      </div>
+    </div>
+  </div>
+  <script src="scramble.js"></script>
+</body>
+
+</html>
